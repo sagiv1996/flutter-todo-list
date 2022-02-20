@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluuter_todo_list_app/service/notification_service.dart';
 import 'package:fluuter_todo_list_app/widget/note_card_widget.dart';
 import 'package:fluuter_todo_list_app/page/edit_note_page.dart';
 import 'note_detail_page.dart';
@@ -87,11 +87,18 @@ class _NotesPageState extends State<NotesPage> {
 
       return GestureDetector(
         onLongPress: () async {
-//          await NotesDataBase.instance.delete(note.id!);
-//          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('Deleted!')));
-//
+
+          // Update record
           Note noteToUpdate = note.copy(id: note.id, isCompleted: !note.isCompleted);
           await NotesDataBase.instance.update(noteToUpdate);
+
+          // Cancel to create notification
+          if(noteToUpdate.isCompleted){
+            NotificationService().cancelNotfication(note.id as int);
+          }
+          else {
+            NotificationService().scheduleNotification(noteToUpdate);
+          }
           refreshNotes();
         },
         onTap: () async {
