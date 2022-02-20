@@ -100,9 +100,10 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     );
 
     await NotesDataBase.instance.update(note);
+    // Cancel notificatin and create new notification if datetime is valid
     NotificationService().cancelNotfication(note.id as int );
-     if (timeForNotfication != null && timeForNotfication!.isAfter(DateTime.now())){
-      NotificationService().scheduleNotification(timeForNotfication!, note);
+     if (timeForNotfication != null){
+      NotificationService().scheduleNotification(note);
     }
 
   }
@@ -116,8 +117,10 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       timeForNotfication: timeForNotfication.toString()
     );
 
+    print('Bfore');
     Note newNote =  await NotesDataBase.instance.create(note);
-      NotificationService().scheduleNotification(timeForNotfication!, newNote);
+    print(newNote.id);
+      NotificationService().scheduleNotification(newNote);
 
   }
 }

@@ -32,7 +32,7 @@ class NotificationService {
   static const platformChannelSpecifics = NotificationDetails(android: androidNotification, iOS: iosNotification);
 
 
-  void scheduleNotification(DateTime scheduledNotificationDateTime, Note note) async {
+  void scheduleNotification(Note note) async {
   // Set time zone for israel
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Jerusalem'));
