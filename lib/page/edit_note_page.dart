@@ -29,6 +29,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     description = widget.note?.description ?? '';
     isCompleted = widget.note?.isCompleted ?? false;
     timeForNotfication = DateTime.tryParse((widget.note?.timeForNotfication).toString());
+    timeForNotfication = timeForNotfication != null && timeForNotfication!.isAfter(DateTime.now()) ? timeForNotfication : null;
   }
 
   @override
@@ -117,9 +118,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       timeForNotfication: timeForNotfication.toString()
     );
 
-    print('Bfore');
     Note newNote =  await NotesDataBase.instance.create(note);
-    print(newNote.id);
       NotificationService().scheduleNotification(newNote);
 
   }
