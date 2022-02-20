@@ -4,8 +4,6 @@ import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/service/notification_service.dart';
 import 'package:fluuter_todo_list_app/widget/note_form_widget.dart';
 
-import '../main.dart';
-
 class AddEditNotePage extends StatefulWidget {
   final Note? note;
 
@@ -118,10 +116,8 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       timeForNotfication: timeForNotfication.toString()
     );
 
-    await NotesDataBase.instance.create(note);
-    if (timeForNotfication != null && timeForNotfication!.isAfter(DateTime.now())){
-      NotificationService().scheduleNotification(timeForNotfication!, note);
-    }
+    Note newNote =  await NotesDataBase.instance.create(note);
+      NotificationService().scheduleNotification(timeForNotfication!, newNote);
 
   }
 }

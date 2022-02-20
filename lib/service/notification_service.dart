@@ -1,9 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
-import 'package:intl/intl.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import '../main.dart';
 
 
 class NotificationService {
@@ -35,16 +33,9 @@ class NotificationService {
 
 
   void scheduleNotification(DateTime scheduledNotificationDateTime, Note note) async {
-
-//    await flutterLocalNotificationsPlugin.schedule(note.id as int, note.title, note.description,
-//        DateTime.parse(scheduledNotificationDateTime.toString()), platformChannelSpecifics, payload: note.id.toString());
-//
-//;
-
   // Set time zone for israel
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Jerusalem'));
-    print(DateTime.parse(note.timeForNotfication.toString()));
     await flutterLocalNotificationsPlugin.zonedSchedule(
         note.id as int,
         note.title,
@@ -52,7 +43,7 @@ class NotificationService {
         tz.TZDateTime.from(DateTime.parse(note.timeForNotfication.toString()), tz.local),
         platformChannelSpecifics,
       androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
