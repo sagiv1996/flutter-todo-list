@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluuter_todo_list_app/model/note.dart';
+import 'package:fluuter_todo_list_app/db/notes_database.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluuter_todo_list_app/widget/note_card_widget.dart';
+import 'package:fluuter_todo_list_app/page/edit_note_page.dart';
+import 'note_detail_page.dart';
+class NotesPage extends StatefulWidget {
+  @override
+  _NotesPageState createState() => _NotesPageState();
+}
+
+class _NotesPageState extends State<NotesPage> {
+  late List<Note> notes;
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    refreshNotes();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+
+        appBar: AppBar(
+          title: const Text(
+            'כל המשימות',
+            style: TextStyle(fontSize: 24.0),
+          ),
+          actions: [createInfoButton(), SizedBox(width: 12.0,)],
+        ),
+        body: Center(
+          child: this.isLoading ?
+          CircularProgressIndicator() :
+              this.notes.isEmpty ?
+                  const Text('הוסף משימות') :
+                  this.buildNotes(),
+
+        ),
+    floatingActionButton: FloatingActionButton(
+      backgroundColor: Colors.black,
+      child: Icon(Icons.add),
+      onPressed: () async {
+
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => AddEditNotePage()),
+        );
+
+        refreshNotes();
+      },
+    ),
+      );
+
+  Future refreshNotes() async {
+    setState(() {
+      this.isLoading = true;
+    });
+    this.notes = await NotesDataBase.instance.readAllNotes();
+
+    setState(() {
+      this.isLoading = false;
+    });
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    NotesDataBase.instance.close();
+
+    super.deactivate();
+  }
+
+  Widget buildNotes() => StaggeredGridView.countBuilder(
+    padding: EdgeInsets.all(8),
+    itemCount: notes.length,
+    staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+    crossAxisCount: 4,
+    mainAxisSpacing: 4,
+    crossAxisSpacing: 4,
+    itemBuilder: (context, index) {
+      final note = notes[index];
+
+      return GestureDetector(
+        onLongPress: () async {
+//          await NotesDataBase.instance.delete(note.id!);
+//          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('Deleted!')));
+//
+          Note noteToUpdate = note.copy(id: note.id, isCompleted: !note.isCompleted);
+          await NotesDataBase.instance.update(noteToUpdate);
+          refreshNotes();
+        },
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => NoteDetailPage(noteId: note.id!),
+          ));
+
+          refreshNotes();
+        },
+        child: NoteCardWidget(note: note, index: index),
+      );
+    },
+  );
+
+
+  IconButton createInfoButton() => IconButton(onPressed: () {
+  showDialog(
+  context: context,
+  builder: (_) => AlertDialog(
+  content: Text('לחיצה ארוכה על המשימה תסמן אותה כבוצעה'),
+
+  )
+  );
+}, icon: Icon(Icons.info_outline));
+}
