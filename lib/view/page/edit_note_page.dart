@@ -27,7 +27,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     title = widget.note?.title ?? '';
     description = widget.note?.description ?? '';
     isCompleted = widget.note?.isCompleted ?? false;
-    timeForNotfication = DateTime.tryParse((widget.note?.timeForNotfication).toString());
+    timeForNotfication = DateTime.tryParse((widget.note?.timeForNotification).toString());
     timeForNotfication = timeForNotfication != null && timeForNotfication!.isAfter(DateTime.now()) ? timeForNotfication : null;
   }
 
@@ -96,7 +96,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         description: description,
         createdTime: DateTime.now(),
         isCompleted: isCompleted,
-        timeForNotfication: timeForNotfication.toString()
+        timeForNotification: timeForNotfication.toString()
     );
     await controllerNote.addNote(note);
   }
@@ -106,7 +106,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     final note = widget.note!.copy(
       title: title,
       description: description,
-      timeForNotfication: timeForNotfication.toString(),
+      timeForNotification: timeForNotfication.toString(),
       isCompleted: isCompleted
     );
     await controllerNote.updateNote(note);

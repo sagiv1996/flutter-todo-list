@@ -33,7 +33,7 @@ class NotesDataBase {
       ${NoteFields.description} $textType,
       ${NoteFields.createdTime} $dateTimeType,
       ${NoteFields.isCompleted} $boolType,
-      ${NoteFields.timeForNotfication} $textType
+      ${NoteFields.timeForNotification} $textType
       )
     ''');
   }
@@ -58,7 +58,7 @@ class NotesDataBase {
 
   Future<List<Note>> readAllNotes() async {
     final db = await instance.database;
-    final orderBy = '${NoteFields.isCompleted} DESC, ${NoteFields.createdTime} ASC';
+    final orderBy = '${NoteFields.isCompleted}, ${NoteFields.createdTime} ASC';
     final result = await db!.query(
     tableNotes,
     columns: NoteFields.values,

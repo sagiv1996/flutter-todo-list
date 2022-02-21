@@ -7,7 +7,8 @@ class controllerNote{
   // This method create note and create notification
   static Future addNote(Note note) async {
     Note newNote =  await NotesDataBase.instance.create(note);
-    if(newNote.timeForNotfication != null){
+    print(newNote.timeForNotification);
+    if(newNote.timeForNotification != null){
       NotificationService().scheduleNotification(newNote);
     }
   }
@@ -18,7 +19,7 @@ class controllerNote{
 
     // Cancel notificatin and create new notification if datetime is valid
     NotificationService().cancelNotfication(note.id as int );
-     if (note.timeForNotfication != null){
+     if (note.timeForNotification != null){
         NotificationService().scheduleNotification(note);
     }
   }

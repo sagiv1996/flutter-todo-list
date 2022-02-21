@@ -77,7 +77,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           ),
 
           SizedBox(height: 8),
-          note.timeForNotfication == 'null' ?
+          note.timeForNotification == 'null' ?
           Text.rich(
             TextSpan(
               style: TextStyle(color: Colors.white70),
@@ -93,7 +93,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               style: TextStyle(color: Colors.white70),
               children: [
                 WidgetSpan(child: Icon(Icons.notifications_active, color: Colors.white70)),
-                TextSpan(text:  ' ${DateFormat("y MMM d, H:mm").format(DateTime.parse(note.timeForNotfication as String))}'),
+                TextSpan(text:  ' ${DateFormat("y MMM d, H:mm").format(DateTime.parse(note.timeForNotification as String))}'),
               ],
             ),
           )

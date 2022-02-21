@@ -41,7 +41,7 @@ class NotificationService {
         note.id as int,
         note.title,
         note.description,
-        tz.TZDateTime.from(DateTime.parse(note.timeForNotfication.toString()), tz.local),
+        tz.TZDateTime.from(DateTime.parse(note.timeForNotification.toString()), tz.local),
         platformChannelSpecifics,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
