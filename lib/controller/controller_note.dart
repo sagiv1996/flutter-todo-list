@@ -20,10 +20,11 @@ class controllerNote{
     NotificationService().cancelNotfication(note.id as int );
 
     // timeForNotification is save string at database . is why i used 'null'
-     if (note.timeForNotification != 'null'){
-       print('is not null?');
-       print(note.timeForNotification);
-       print(note.timeForNotification != null);
+     if (note.timeForNotification != null &&
+         note.timeForNotification != 'null' &&
+         note.isCompleted == false &&
+         DateTime.parse(note.timeForNotification.toString()).isAfter(DateTime.now()
+         )){
         NotificationService().scheduleNotification(note);
     }
   }

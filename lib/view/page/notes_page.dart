@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fluuter_todo_list_app/service/notification_service.dart';
 import 'package:fluuter_todo_list_app/view/widget/note_card_widget.dart';
 import 'edit_note_page.dart';
 import 'note_detail_page.dart';
@@ -90,15 +90,9 @@ class _NotesPageState extends State<NotesPage> {
 
           // Update record
           Note noteToUpdate = note.copy(id: note.id, isCompleted: !note.isCompleted);
-          await NotesDataBase.instance.update(noteToUpdate);
+          await controllerNote.updateNote(noteToUpdate);
 
-          // Cancel to create notification
-          if(noteToUpdate.isCompleted){
-            NotificationService().cancelNotfication(note.id as int);
-          }
-          else {
-            NotificationService().scheduleNotification(noteToUpdate);
-          }
+
           refreshNotes();
         },
         onTap: () async {
@@ -115,12 +109,12 @@ class _NotesPageState extends State<NotesPage> {
 
 
   IconButton createInfoButton() => IconButton(onPressed: () {
-  showDialog(
-  context: context,
-  builder: (_) => AlertDialog(
-  content: Text('לחיצה ארוכה על המשימה תסמן אותה כבוצעה'),
-
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+      content: Text('לחיצה ארוכה על המשימה תסמן אותה כבוצעה'),
   )
   );
-}, icon: Icon(Icons.info_outline));
+},
+      icon: Icon(Icons.info_outline));
 }
