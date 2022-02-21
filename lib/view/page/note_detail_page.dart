@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
-import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:intl/intl.dart';
 
 import 'edit_note_page.dart';

@@ -3,8 +3,8 @@ import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluuter_todo_list_app/service/notification_service.dart';
-import 'package:fluuter_todo_list_app/widget/note_card_widget.dart';
-import 'package:fluuter_todo_list_app/page/edit_note_page.dart';
+import 'package:fluuter_todo_list_app/view/widget/note_card_widget.dart';
+import 'edit_note_page.dart';
 import 'note_detail_page.dart';
 class NotesPage extends StatefulWidget {
   @override

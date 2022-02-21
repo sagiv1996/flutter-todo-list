@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'page/note_detail_page.dart';
-import 'page/notes_page.dart';
+import 'view/page/note_detail_page.dart';
+import 'view/page/notes_page.dart';
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

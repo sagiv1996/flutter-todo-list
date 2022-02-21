@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluuter_todo_list_app/db/notes_database.dart';
+import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
-import 'package:fluuter_todo_list_app/service/notification_service.dart';
-import 'package:fluuter_todo_list_app/widget/note_form_widget.dart';
+import 'package:fluuter_todo_list_app/view/widget/note_form_widget.dart';
 
 class AddEditNotePage extends StatefulWidget {
   final Note? note;
@@ -72,18 +71,16 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
 
 
   void addOrUpdateNote() async {
-    final isValid = _formKey.currentState
-    !.validate();
-
+    // Vaild from
+    final isValid = _formKey.currentState!.validate();
     if (isValid) {
-    final isUpdating = widget.note != null;
 
-    if (isUpdating) {
-    await updateNote();
-
-    } else {
-    await addNote();
-    }
+      // Update note
+      if (widget.note != null) {
+        updateNote();
+      } else {
+        addNote();
+      }
 
     Navigator.of(context).pop();
 
@@ -91,35 +88,28 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     }
   }
 
-  Future updateNote() async {
-    final note = widget.note
-    !.copy(
+
+  void addNote() async{
+    // Create a new note
+    final note = Note(
+        title: title,
+        description: description,
+        createdTime: DateTime.now(),
+        isCompleted: isCompleted,
+        timeForNotfication: timeForNotfication.toString()
+    );
+    await controllerNote.addNote(note);
+  }
+
+
+  void updateNote() async{
+    final note = widget.note!.copy(
       title: title,
       description: description,
       timeForNotfication: timeForNotfication.toString(),
       isCompleted: isCompleted
     );
-
-    await NotesDataBase.instance.update(note);
-    // Cancel notificatin and create new notification if datetime is valid
-    NotificationService().cancelNotfication(note.id as int );
-     if (timeForNotfication != null){
-      NotificationService().scheduleNotification(note);
-    }
-
+    await controllerNote.updateNote(note);
   }
 
-  Future addNote() async {
-    final note = Note(
-      title: title,
-      description: description,
-      createdTime: DateTime.now(),
-      isCompleted: isCompleted,
-      timeForNotfication: timeForNotfication.toString()
-    );
-
-    Note newNote =  await NotesDataBase.instance.create(note);
-      NotificationService().scheduleNotification(newNote);
-
-  }
 }
