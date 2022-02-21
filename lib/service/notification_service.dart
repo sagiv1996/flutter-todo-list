@@ -33,7 +33,6 @@ class NotificationService {
 
 
   void scheduleNotification(Note note) async {
-    print('the id is:  ${note.id.toString()}');
   // Set time zone for israel
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Jerusalem'));
