@@ -8,9 +8,14 @@ import 'view/page/notes_page.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
+
+// This value relavant only with user back from notification
+int? noteId;
+
+
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  
 
   var initializationSettingsAndroid =
   AndroidInitializationSettings('icon', );
@@ -24,10 +29,7 @@ Future main() async{
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-          runApp(MaterialApp(
-            home: NoteDetailPage(noteId: int.parse(payload!))
-          )
-          );
+        noteId = int.tryParse(payload!);
       },
 
   );
@@ -53,9 +55,6 @@ class myApp extends StatelessWidget {
 
       ),
 
-
-     // builder: (context, child) =>
-       // MediaQuery(data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true), child: child as Widget),
     debugShowCheckedModeBanner: false,
     title: title,
     themeMode: ThemeMode.dark,
@@ -67,6 +66,6 @@ class myApp extends StatelessWidget {
         elevation: 0
       )
     ),
-    home: NotesPage(),
+    home: noteId == null? NotesPage() : NoteDetailPage(noteId: noteId as int),
   );
 }
