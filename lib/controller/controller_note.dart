@@ -7,8 +7,7 @@ class controllerNote{
   // This method create note and create notification
   static Future addNote(Note note) async {
     Note newNote =  await NotesDataBase.instance.create(note);
-    print(newNote.timeForNotification);
-    if(newNote.timeForNotification != null){
+    if(note.timeForNotification != null){
       NotificationService().scheduleNotification(newNote);
     }
   }
@@ -19,7 +18,12 @@ class controllerNote{
 
     // Cancel notificatin and create new notification if datetime is valid
     NotificationService().cancelNotfication(note.id as int );
-     if (note.timeForNotification != null){
+
+    // timeForNotification is save string at database . is why i used 'null'
+     if (note.timeForNotification != 'null'){
+       print('is not null?');
+       print(note.timeForNotification);
+       print(note.timeForNotification != null);
         NotificationService().scheduleNotification(note);
     }
   }
