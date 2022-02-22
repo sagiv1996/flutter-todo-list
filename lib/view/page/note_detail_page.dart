@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +119,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   Widget deleteButton() => IconButton(
     icon: Icon(Icons.delete),
     onPressed: () async {
-      await NotesDataBase.instance.delete(widget.noteId);
+      await ControllerNote.deleteNote(note.id as int);
 
       Navigator.of(context).pop();
     },
