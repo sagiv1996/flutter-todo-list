@@ -98,7 +98,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         isCompleted: isCompleted,
         timeForNotification: timeForNotfication.toString()
     );
-    await controllerNote.addNote(note);
+    await ControllerNote.addNote(note);
   }
 
 
@@ -109,7 +109,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       timeForNotification: timeForNotfication.toString(),
       isCompleted: isCompleted
     );
-    await controllerNote.updateNote(note);
+    await ControllerNote.updateNote(note);
   }
 
 }

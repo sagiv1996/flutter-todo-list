@@ -2,7 +2,7 @@ import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/service/notification_service.dart';
 
-class controllerNote{
+class ControllerNote{
 
   // This method create note and create notification
   static Future addNote(Note note) async {

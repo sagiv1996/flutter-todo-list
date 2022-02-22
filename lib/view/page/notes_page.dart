@@ -90,7 +90,7 @@ class _NotesPageState extends State<NotesPage> {
 
           // Update record
           Note noteToUpdate = note.copy(id: note.id, isCompleted: !note.isCompleted);
-          await controllerNote.updateNote(noteToUpdate);
+          await ControllerNote.updateNote(noteToUpdate);
 
 
           refreshNotes();
