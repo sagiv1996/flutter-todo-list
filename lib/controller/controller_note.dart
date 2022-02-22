@@ -28,4 +28,10 @@ class ControllerNote{
         NotificationService().scheduleNotification(note);
     }
   }
+
+  // This method get note id and delete note and cancek notification
+  static Future deleteNote(int noteId) async{
+      await NotesDataBase.instance.delete(noteId);
+      NotificationService().cancelNotfication(noteId);
+  }
 }
