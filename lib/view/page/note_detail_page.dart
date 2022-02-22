@@ -20,6 +20,7 @@ class NoteDetailPage extends StatefulWidget {
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
   late Note note;
+
   bool isLoading = false;
 
   @override
@@ -39,70 +40,71 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      actions: [editButton(), deleteButton()],
-    ),
-    body: isLoading
-        ? Center(child: CircularProgressIndicator())
-        : Padding(
-      padding: EdgeInsets.all(12),
-      child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        children: [
-          Text.rich(
-            TextSpan(
-              style: TextStyle(color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold),
-              children: [
-                WidgetSpan(child:
-                Icon(Icons.note, color: Colors.white70)),
-                TextSpan(text:  ' ${note.title}'),
-
-              ],
-            ),
-          ),
-
-
-          SizedBox(height: 8),
-
-          Text.rich(
-            TextSpan(
-              style: TextStyle(color: Colors.white70, fontSize: 18),
-              children: [
-                WidgetSpan(child:
-                Icon(Icons.speaker_notes, color: Colors.white70)),
-                TextSpan(text:  ' ${note.description}'),
-              ],
-            ),
-          ),
-
-          SizedBox(height: 8),
-          note.timeForNotification == 'null' ?
-          Text.rich(
-            TextSpan(
-              style: TextStyle(color: Colors.white70),
-              children: [
-                WidgetSpan(child:
-                Icon(Icons.notifications_off, color: Colors.white70)),
-                TextSpan(text:  'לא הוגדרה התראה '),
-              ],
-            ),
-          ):
-          Text.rich(
-            TextSpan(
-              style: TextStyle(color: Colors.white70),
-              children: [
-                WidgetSpan(child: Icon(Icons.notifications_active, color: Colors.white70)),
-                TextSpan(text:  ' ${DateFormat("y MMM d, H:mm").format(DateTime.parse(note.timeForNotification as String))}'),
-              ],
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-
+        appBar: AppBar(
+          actions: [editButton(), deleteButton()],
+        ),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: EdgeInsets.all(12),
+                child: ListView(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                        children: [
+                          WidgetSpan(
+                              child: Icon(Icons.note, color: Colors.white70)),
+                          TextSpan(text: ' ${note.title}'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text.rich(
+                      TextSpan(
+                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                        children: [
+                          WidgetSpan(
+                              child: Icon(Icons.speaker_notes,
+                                  color: Colors.white70)),
+                          TextSpan(text: ' ${note.description}'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    note.timeForNotification == 'null'
+                        ? Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.white70),
+                              children: [
+                                WidgetSpan(
+                                    child: Icon(Icons.notifications_off,
+                                        color: Colors.white70)),
+                                TextSpan(text: 'לא הוגדרה התראה '),
+                              ],
+                            ),
+                          )
+                        : Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.white70),
+                              children: [
+                                WidgetSpan(
+                                    child: Icon(Icons.notifications_active,
+                                        color: Colors.white70)),
+                                TextSpan(
+                                    text:
+                                        ' ${DateFormat("y MMM d, H:mm").format(DateTime.parse(note.timeForNotification as String))}'),
+                              ],
+                            ),
+                          )
+                  ],
+                ),
+              ),
+      );
 
   Widget editButton() => IconButton(
       icon: Icon(Icons.edit_outlined),
@@ -117,13 +119,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       });
 
   Widget deleteButton() => IconButton(
-    icon: Icon(Icons.delete),
-    onPressed: () async {
-      await ControllerNote.deleteNote(note.id as int);
+        icon: Icon(Icons.delete),
+        onPressed: () async {
+          await ControllerNote.deleteNote(note.id as int);
 
-      Navigator.of(context).pop();
-    },
-  );
-
+          Navigator.of(context).pop();
+        },
+      );
 }
-

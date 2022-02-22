@@ -4,110 +4,108 @@ import 'package:intl/intl.dart';
 
 class NoteFormWidget extends StatelessWidget {
   final String? title;
+
   final String? description;
+
   final DateTime? timeForNotfication;
+
   final ValueChanged<String> onChangedTitle;
   final ValueChanged<String> onChangedDescription;
+
   final ValueChanged<DateTime?> onChangeDateTime;
 
-  const NoteFormWidget({
-    Key? key,
-    this.title = '',
-    this.description = '',
-    this.timeForNotfication = null,
-    required this.onChangedTitle,
-    required this.onChangedDescription,
-    required this.onChangeDateTime
-  }) : super(key: key);
+  const NoteFormWidget(
+      {Key? key,
+      this.title = '',
+      this.description = '',
+      this.timeForNotfication = null,
+      required this.onChangedTitle,
+      required this.onChangedDescription,
+      required this.onChangeDateTime})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-    child: Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                children: [],
+              ),
+              buildTitle(),
+              SizedBox(height: 8),
+              buildDescription(),
+              buildFieldDateTime()
             ],
           ),
-          buildTitle(),
-          SizedBox(height: 8),
-          buildDescription(),
-          buildFieldDateTime()
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   Widget buildTitle() => TextFormField(
-    maxLines: 1,
-    autofocus: true,
-    initialValue: title,
-    style: TextStyle(
-      color: Colors.white70,
-      fontWeight: FontWeight.bold,
-      fontSize: 24,
-    ),
-    decoration: InputDecoration(
-      icon: Icon(Icons.note,color: Colors.white70 ),
-      border: InputBorder.none,
-      hintText: 'כותרת',
-      hintStyle: TextStyle(color: Colors.white70)
-    ),
-    validator: (title) =>
-    title != null && title.isEmpty ? 'חובה להכניס ערך' : null,
-    onChanged: onChangedTitle,
-  );
+        maxLines: 1,
+        autofocus: true,
+        initialValue: title,
+        style: TextStyle(
+          color: Colors.white70,
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+        ),
+        decoration: InputDecoration(
+            icon: Icon(Icons.note, color: Colors.white70),
+            border: InputBorder.none,
+            hintText: 'כותרת',
+            hintStyle: TextStyle(color: Colors.white70)),
+        validator: (title) =>
+            title != null && title.isEmpty ? 'חובה להכניס ערך' : null,
+        onChanged: onChangedTitle,
+      );
 
   Widget buildDescription() => TextFormField(
-    maxLines: 5,
-    initialValue: description,
-    style: TextStyle(color: Colors.white60, fontSize: 18),
-    decoration: InputDecoration(
-      icon: Icon(Icons.speaker_notes, color: Colors.white70),
-      border: InputBorder.none,
-      hintText: 'הוספת מלל',
-      hintStyle: TextStyle(color: Colors.white60),
-    ),
-    onChanged: onChangedDescription,
-  );
+        maxLines: 5,
+        initialValue: description,
+        style: TextStyle(color: Colors.white60, fontSize: 18),
+        decoration: InputDecoration(
+          icon: Icon(Icons.speaker_notes, color: Colors.white70),
+          border: InputBorder.none,
+          hintText: 'הוספת מלל',
+          hintStyle: TextStyle(color: Colors.white60),
+        ),
+        onChanged: onChangedDescription,
+      );
 
   Widget buildFieldDateTime() => DateTimeField(
-    validator: (value) => value != null && value.isBefore(DateTime.now()) ? 'ערך לא תקין' : null,
-    autovalidateMode: AutovalidateMode.always ,
-    decoration: InputDecoration(
-      border: InputBorder.none,
-      hintText: 'הגדרת תזכורת',
-      hintStyle: TextStyle(color: Colors.white70),
-      icon: Icon(Icons.notifications, color: Colors.white70)
-    ),
-    style: TextStyle(color: Colors.white70, ),
-    strutStyle: StrutStyle(
+        validator: (value) => value != null && value.isBefore(DateTime.now())
+            ? 'ערך לא תקין'
+            : null,
+        autovalidateMode: AutovalidateMode.always,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'הגדרת תזכורת',
+            hintStyle: TextStyle(color: Colors.white70),
+            icon: Icon(Icons.notifications, color: Colors.white70)),
+        style: TextStyle(
+          color: Colors.white70,
+        ),
+        strutStyle: StrutStyle(),
+        initialValue: timeForNotfication,
+        format: DateFormat("y MMM d, H:mm"),
+        onChanged: this.onChangeDateTime,
+        onShowPicker: (context, currentValue) async {
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime.now(),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime.now().add(Duration(days: 365 * 2)));
 
-    ) ,
-    initialValue: timeForNotfication,
-    format: DateFormat("y MMM d, H:mm"),
-    onChanged: this.onChangeDateTime,
-    onShowPicker: (context, currentValue) async {
-
-      final date = await showDatePicker(
-
-          context: context,
-          firstDate: DateTime.now(),
-          initialDate: currentValue ?? DateTime.now(),
-          lastDate: DateTime.now().add(Duration(days: 365 * 2)));
-
-      if (date != null) {
-        final time = await showTimePicker(
-          context: context,
-          initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now())
-        );
-        return DateTimeField.combine(date, time);
-      }
-
-    },
-  );
-
-
+          if (date != null) {
+            final time = await showTimePicker(
+                context: context,
+                initialTime:
+                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now()));
+            return DateTimeField.combine(date, time);
+          }
+        },
+      );
 }

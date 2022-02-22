@@ -37,24 +37,23 @@ class NoteCardWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          Text(
-          time,
-          style: TextStyle(color: Colors.grey.shade700),
+            Text(
+              time,
+              style: TextStyle(color: Colors.grey.shade700),
+            ),
+            SizedBox(height: 4),
+            Text(
+              note.title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  decoration:
+                      note.isCompleted ? TextDecoration.lineThrough : null),
+            ),
+          ],
         ),
-        SizedBox(height: 4),
-        Text(
-          note.title,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            decoration: note.isCompleted? TextDecoration.lineThrough: null
-          ),
-        ),
-
-      ],
-    ),
-    ),
+      ),
     );
   }
 
@@ -74,4 +73,3 @@ class NoteCardWidget extends StatelessWidget {
     }
   }
 }
-
