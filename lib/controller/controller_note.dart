@@ -6,7 +6,8 @@ class ControllerNote {
   // This method create note and create notification
   static Future addNote(Note note) async {
     Note newNote = await NotesDataBase.instance.create(note);
-    if (note.timeForNotification != null) {
+    if (note.timeForNotification != null &&
+        note.timeForNotification != 'null') {
       NotificationService().scheduleNotification(newNote);
     }
   }
