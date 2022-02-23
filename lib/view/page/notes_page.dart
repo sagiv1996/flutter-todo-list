@@ -16,6 +16,7 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   late List<Note> notes;
 
+  final QuickActions quickActions = QuickActions();
   bool isLoading = false;
 
   String shortcut = '';
@@ -25,7 +26,6 @@ class _NotesPageState extends State<NotesPage> {
     // TODO: implement initState
     super.initState();
 
-    final QuickActions quickActions = QuickActions();
     quickActions.initialize((String shortcutType) {
       setState(() {
         if (shortcutType != null) shortcut = shortcutType;
@@ -35,7 +35,7 @@ class _NotesPageState extends State<NotesPage> {
     quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(
         type: 'new_note',
-        localizedTitle: 'New note',
+        localizedTitle: 'משימה חדשה',
         icon: 'add',
       ),
     ]).then((value) => {
@@ -45,6 +45,7 @@ class _NotesPageState extends State<NotesPage> {
                   MaterialPageRoute(builder: (context) => AddEditNotePage()))
             }
         });
+
     refreshNotes();
   }
 
