@@ -34,12 +34,12 @@ class _NotesPageState extends State<NotesPage> {
 
     quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(
-        type: 'Notification',
+        type: 'new_note',
         localizedTitle: 'New note',
         icon: 'add',
       ),
     ]).then((value) => {
-          if (shortcut == 'Notification')
+          if (shortcut == 'new_note')
             {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => AddEditNotePage()))
