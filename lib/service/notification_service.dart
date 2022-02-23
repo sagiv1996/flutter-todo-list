@@ -18,14 +18,11 @@ class NotificationService {
   static const IOSNotificationDetails iosNotification = IOSNotificationDetails(
     presentAlert: true,
     presentBadge: true,
-    presentSound: true,
+    presentSound: true
   );
 
   static const AndroidNotificationDetails androidNotification =
-      AndroidNotificationDetails(
-    'todolist_notif',
-    'todolist_notif',
-  );
+      AndroidNotificationDetails('todolist_notif', 'todolist_notif');
 
   static const platformChannelSpecifics =
       NotificationDetails(android: androidNotification, iOS: iosNotification);
@@ -45,6 +42,7 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: note.id.toString(),
+
     );
   }
 
