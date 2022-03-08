@@ -34,6 +34,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     setState(() => isLoading = true);
 
     this.note = await NotesDataBase.instance.readNote(widget.noteId);
+    if (note == null){
+      Navigator.of(context).pop();
+    }
 
     setState(() => isLoading = false);
   }
@@ -123,7 +126,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         onPressed: () async {
           await ControllerNote.deleteNote(note.id as int);
 
-          Navigator.of(context).pop();
+          //Navigator.of(context).pop();
         },
       );
 }
