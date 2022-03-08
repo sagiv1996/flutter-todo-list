@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'view/page/note_detail_page.dart';
 import 'view/page/notes_page.dart';
 
 
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
+
+
+final QuickActions quickActions = QuickActions();
+
+
 
 
 // This value relavant only with user back from notification
@@ -39,6 +44,16 @@ Future main() async{
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]); WidgetsFlutterBinding.ensureInitialized();
+
+
+
+
+
+  await quickActions.initialize((String shortcutType) {
+    noteId = int.tryParse(shortcutType);
+
+  });
+
 
 
 
