@@ -84,7 +84,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                                 WidgetSpan(
                                     child: Icon(Icons.notifications_off,
                                         color: Colors.white70)),
-                                TextSpan(text: 'לא הוגדרה התראה '),
+                                TextSpan(text: ' No notification set'),
                               ],
                             ),
                           )

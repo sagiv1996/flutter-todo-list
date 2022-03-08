@@ -35,7 +35,7 @@ class _NotesPageState extends State<NotesPage> {
     quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(
         type: 'new_note',
-        localizedTitle: 'משימה חדשה',
+        localizedTitle: 'New note',
         icon: 'add',
       ),
     ]).then((value) => {
@@ -53,7 +53,7 @@ class _NotesPageState extends State<NotesPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text(
-            'כל המשימות',
+            'All notes',
             style: TextStyle(fontSize: 24.0),
           ),
           actions: [
@@ -67,7 +67,7 @@ class _NotesPageState extends State<NotesPage> {
           child: this.isLoading
               ? CircularProgressIndicator()
               : this.notes.isEmpty
-                  ? const Text('הוסף משימות')
+                  ? const Text('Add notes')
                   : this.buildNotes(),
         ),
         floatingActionButton: FloatingActionButton(
@@ -138,7 +138,7 @@ class _NotesPageState extends State<NotesPage> {
         showDialog(
             context: context,
             builder: (_) => AlertDialog(
-                  content: Text('לחיצה ארוכה על המשימה תסמן אותה כבוצעה'),
+                  content: Text('Long press change note to completed'),
                 ));
       },
       icon: Icon(Icons.info_outline));

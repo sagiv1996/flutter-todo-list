@@ -55,10 +55,10 @@ class NoteFormWidget extends StatelessWidget {
         decoration: InputDecoration(
             icon: Icon(Icons.note, color: Colors.white70),
             border: InputBorder.none,
-            hintText: 'כותרת',
+            hintText: 'Add header',
             hintStyle: TextStyle(color: Colors.white70)),
         validator: (title) =>
-            title != null && title.isEmpty ? 'חובה להכניס ערך' : null,
+            title != null && title.isEmpty ? 'Value is required' : null,
         onChanged: onChangedTitle,
       );
 
@@ -69,7 +69,7 @@ class NoteFormWidget extends StatelessWidget {
         decoration: InputDecoration(
           icon: Icon(Icons.speaker_notes, color: Colors.white70),
           border: InputBorder.none,
-          hintText: 'הוספת מלל',
+          hintText: 'Add descrption',
           hintStyle: TextStyle(color: Colors.white60),
         ),
         onChanged: onChangedDescription,
@@ -77,12 +77,12 @@ class NoteFormWidget extends StatelessWidget {
 
   Widget buildFieldDateTime() => DateTimeField(
         validator: (value) => value != null && value.isBefore(DateTime.now())
-            ? 'ערך לא תקין'
+            ? 'Value is not vaild'
             : null,
         autovalidateMode: AutovalidateMode.always,
         decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: 'הגדרת תזכורת',
+            hintText: 'Set notification',
             hintStyle: TextStyle(color: Colors.white70),
             icon: Icon(Icons.notifications, color: Colors.white70)),
         style: TextStyle(

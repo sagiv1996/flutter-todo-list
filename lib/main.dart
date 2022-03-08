@@ -5,6 +5,7 @@ import 'view/page/note_detail_page.dart';
 import 'view/page/notes_page.dart';
 
 
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
@@ -49,11 +50,6 @@ class myApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-      builder: (context, child) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: child as Widget,
-
-      ),
 
     debugShowCheckedModeBanner: false,
     title: title,
