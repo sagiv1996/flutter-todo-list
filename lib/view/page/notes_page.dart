@@ -3,8 +3,9 @@ import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluuter_todo_list_app/service/shortcut_service.dart';
 import 'package:fluuter_todo_list_app/view/widget/note_card_widget.dart';
-import 'package:quick_actions/quick_actions.dart';
+import '../../main.dart';
 import 'edit_note_page.dart';
 import 'note_detail_page.dart';
 
@@ -16,37 +17,17 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   late List<Note> notes;
 
-  final QuickActions quickActions = QuickActions();
+//
+//  final QuickActions quickActions = QuickActions().;
   bool isLoading = false;
-
-  String shortcut = '';
 
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-
-    quickActions.initialize((String shortcutType) {
-      setState(() {
-        if (shortcutType != null) shortcut = shortcutType;
-      });
-    });
-
-    quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(
-        type: 'new_note',
-        localizedTitle: 'New note',
-        icon: 'add',
-      ),
-    ]).then((value) => {
-          if (shortcut == 'new_note')
-            {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AddEditNotePage()))
-            }
-        });
 
     refreshNotes();
+
+    super.initState();
   }
 
   @override
@@ -88,6 +69,10 @@ class _NotesPageState extends State<NotesPage> {
       this.isLoading = true;
     });
     this.notes = await NotesDataBase.instance.readAllNotes();
+
+    // Set shortcuts items
+    await quickActions
+        .setShortcutItems(await ShortcuteService().returnShortscute());
 
     setState(() {
       this.isLoading = false;
