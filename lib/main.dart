@@ -43,11 +43,13 @@ Future main() async {
     noteId = int.tryParse(shortcutType);
   });
 
-  runApp(myApp());
+  runApp(MainClass());
 }
 
-class myApp extends StatelessWidget {
-  static final String title = 'Notes SQLite';
+class MainClass extends StatelessWidget {
+  static String title = 'Todo list app';
+
+  const MainClass({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -62,7 +64,7 @@ class myApp extends StatelessWidget {
         home: noteId == null
             ? NotesPage()
             : noteId == -1
-                ? AddEditNotePage()
+                ? const AddEditNotePage()
                 : NoteDetailPage(noteId: noteId as int),
       );
 }
