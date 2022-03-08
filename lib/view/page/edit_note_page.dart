@@ -3,6 +3,8 @@ import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/view/widget/note_form_widget.dart';
 
+import 'notes_page.dart';
+
 class AddEditNotePage extends StatefulWidget {
   final Note? note;
 
@@ -81,7 +83,14 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         addNote();
       }
 
-      Navigator.of(context).pop();
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => NotesPage()),
+            (Route<dynamic> route) => false);
+      }
     }
   }
 
