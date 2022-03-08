@@ -71,8 +71,8 @@ class _NotesPageState extends State<NotesPage> {
     notes = await NotesDataBase.instance.readAllNotes();
 
     // Set shortcuts items
-    await quickActions
-        .setShortcutItems(await ShortcuteService().returnShortscute());
+    quickActions
+        .setShortcutItems(ShortcuteService().returnShortcuts(notes));
 
     setState(() {
       isLoading = false;

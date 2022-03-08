@@ -12,6 +12,9 @@ class ShortcuteService {
     return shortcutItems;
   }
 
+  List<ShortcutItem> returnShortcuts(List<Note> notes) =>
+      notes.map((note) => noteToShortcutItem(note)).toList();
+
   ShortcutItem noteToShortcutItem(Note note) => ShortcutItem(
       type: note.id.toString(), localizedTitle: note.title, icon: 'AppIcon');
 }
