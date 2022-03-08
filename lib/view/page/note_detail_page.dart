@@ -5,6 +5,7 @@ import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:intl/intl.dart';
 
 import 'edit_note_page.dart';
+import 'notes_page.dart';
 
 class NoteDetailPage extends StatefulWidget {
   final int noteId;
@@ -34,7 +35,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     setState(() => isLoading = true);
 
     this.note = await NotesDataBase.instance.readNote(widget.noteId);
-    if (note == null){
+    if (note == null) {
       Navigator.of(context).pop();
     }
 
@@ -125,8 +126,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         icon: Icon(Icons.delete),
         onPressed: () async {
           await ControllerNote.deleteNote(note.id as int);
-
-          //Navigator.of(context).pop();
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          } else
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => NotesPage()),
+                (Route<dynamic> route) => false);
         },
       );
 }
