@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:quick_actions/quick_actions.dart';
+import 'view/page/edit_note_page.dart';
 import 'view/page/note_detail_page.dart';
 import 'view/page/notes_page.dart';
 
@@ -60,6 +61,8 @@ class myApp extends StatelessWidget {
                 backgroundColor: Colors.transparent, elevation: 0)),
         home: noteId == null
             ? NotesPage()
-            : NoteDetailPage(noteId: noteId as int),
+            : noteId == -1
+                ? AddEditNotePage()
+                : NoteDetailPage(noteId: noteId as int),
       );
 }
