@@ -134,7 +134,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => NotesPage()),
-                (Route<dynamic> route) => false);
+                    (Route<dynamic> route) => false);
           }
         },
       );
