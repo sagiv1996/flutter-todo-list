@@ -103,7 +103,7 @@ class NoteFormWidget extends StatelessWidget {
             final time = await showTimePicker(
                 context: context,
                 initialTime:
-                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now()));
+                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now().add(Duration(minutes: 2))));
             return DateTimeField.combine(date, time);
           }
         },
