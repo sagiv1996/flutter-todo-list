@@ -39,7 +39,7 @@ class _NotesPageState extends State<NotesPage> {
           ),
           actions: [
             createInfoButton(),
-            SizedBox(
+            const SizedBox(
               width: 12.0,
             )
           ],
@@ -66,16 +66,16 @@ class _NotesPageState extends State<NotesPage> {
 
   Future refreshNotes() async {
     setState(() {
-      this.isLoading = true;
+      isLoading = true;
     });
-    this.notes = await NotesDataBase.instance.readAllNotes();
+    notes = await NotesDataBase.instance.readAllNotes();
 
     // Set shortcuts items
     await quickActions
         .setShortcutItems(await ShortcuteService().returnShortscute());
 
     setState(() {
-      this.isLoading = false;
+      isLoading = false;
     });
   }
 
@@ -122,9 +122,9 @@ class _NotesPageState extends State<NotesPage> {
       onPressed: () {
         showDialog(
             context: context,
-            builder: (_) => AlertDialog(
+            builder: (_) => const AlertDialog(
                   content: Text('Long press change note to completed'),
                 ));
       },
-      icon: Icon(Icons.info_outline));
+      icon: const Icon(Icons.info_outline));
 }

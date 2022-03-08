@@ -18,7 +18,7 @@ class NoteFormWidget extends StatelessWidget {
       {Key? key,
       this.title = '',
       this.description = '',
-      this.timeForNotfication = null,
+      this.timeForNotfication,
       required this.onChangedTitle,
       required this.onChangedDescription,
       required this.onChangeDateTime})
@@ -27,7 +27,7 @@ class NoteFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -35,7 +35,7 @@ class NoteFormWidget extends StatelessWidget {
                 children: [],
               ),
               buildTitle(),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               buildDescription(),
               buildFieldDateTime()
             ],
@@ -47,12 +47,12 @@ class NoteFormWidget extends StatelessWidget {
         maxLines: 1,
         autofocus: true,
         initialValue: title,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white70,
           fontWeight: FontWeight.bold,
           fontSize: 24,
         ),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             icon: Icon(Icons.note, color: Colors.white70),
             border: InputBorder.none,
             hintText: 'Add header',
@@ -65,8 +65,8 @@ class NoteFormWidget extends StatelessWidget {
   Widget buildDescription() => TextFormField(
         maxLines: 5,
         initialValue: description,
-        style: TextStyle(color: Colors.white60, fontSize: 18),
-        decoration: InputDecoration(
+        style: const TextStyle(color: Colors.white60, fontSize: 18),
+        decoration: const InputDecoration(
           icon: Icon(Icons.speaker_notes, color: Colors.white70),
           border: InputBorder.none,
           hintText: 'Add descrption',
@@ -80,18 +80,18 @@ class NoteFormWidget extends StatelessWidget {
             ? 'Value is not vaild'
             : null,
         autovalidateMode: AutovalidateMode.always,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             border: InputBorder.none,
             hintText: 'Set notification',
             hintStyle: TextStyle(color: Colors.white70),
             icon: Icon(Icons.notifications, color: Colors.white70)),
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white70,
         ),
         strutStyle: StrutStyle(),
         initialValue: timeForNotfication,
         format: DateFormat("y MMM d, H:mm"),
-        onChanged: this.onChangeDateTime,
+        onChanged: onChangeDateTime,
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
               context: context,

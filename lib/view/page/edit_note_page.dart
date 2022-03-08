@@ -53,8 +53,8 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
             onChangedTitle: (title) => setState(() => this.title = title),
             onChangedDescription: (description) =>
                 setState(() => this.description = description),
-            onChangeDateTime: (newTime) => setState(() => this
-                .timeForNotfication = DateTime.tryParse(newTime.toString())),
+            onChangeDateTime: (newTime) => setState(() =>
+                timeForNotfication = DateTime.tryParse(newTime.toString())),
           ),
         ),
       );
@@ -68,7 +68,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       });
 
   Widget buildSaveButton() =>
-      IconButton(icon: Icon(Icons.save), onPressed: addOrUpdateNote);
+      IconButton(icon: const Icon(Icons.save), onPressed: addOrUpdateNote);
 
   void addOrUpdateNote() async {
     // Vaild from

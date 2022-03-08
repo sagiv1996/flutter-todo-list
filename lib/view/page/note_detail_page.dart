@@ -34,7 +34,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   Future refreshNote() async {
     setState(() => isLoading = true);
 
-    this.note = await NotesDataBase.instance.readNote(widget.noteId);
+    note = await NotesDataBase.instance.readNote(widget.noteId);
     if (note == null) {
       Navigator.of(context).pop();
     }
@@ -56,32 +56,33 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   children: [
                     Text.rich(
                       TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 22,
                             fontWeight: FontWeight.bold),
                         children: [
-                          WidgetSpan(
+                          const WidgetSpan(
                               child: Icon(Icons.note, color: Colors.white70)),
                           TextSpan(text: ' ${note.title}'),
                         ],
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text.rich(
                       TextSpan(
-                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 18),
                         children: [
-                          WidgetSpan(
+                          const WidgetSpan(
                               child: Icon(Icons.speaker_notes,
                                   color: Colors.white70)),
                           TextSpan(text: ' ${note.description}'),
                         ],
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     note.timeForNotification == 'null'
-                        ? Text.rich(
+                        ? const Text.rich(
                             TextSpan(
                               style: TextStyle(color: Colors.white70),
                               children: [
@@ -96,7 +97,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                             TextSpan(
                               style: TextStyle(color: Colors.white70),
                               children: [
-                                WidgetSpan(
+                                const WidgetSpan(
                                     child: Icon(Icons.notifications_active,
                                         color: Colors.white70)),
                                 TextSpan(
@@ -123,17 +124,18 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       });
 
   Widget deleteButton() => IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: () async {
           await ControllerNote.deleteNote(note.id as int);
           if (Navigator.of(context).canPop()) {
             Navigator.of(context).pop();
-          } else
+          } else {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => NotesPage()),
                 (Route<dynamic> route) => false);
+          }
         },
       );
 }
