@@ -45,11 +45,11 @@ class _NotesPageState extends State<NotesPage> {
           ],
         ),
         body: Center(
-          child: this.isLoading
-              ? CircularProgressIndicator()
-              : this.notes.isEmpty
+          child: isLoading
+              ? const CircularProgressIndicator()
+              : notes.isEmpty
                   ? const Text('Add notes')
-                  : this.buildNotes(),
+                  : buildNotes(),
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
