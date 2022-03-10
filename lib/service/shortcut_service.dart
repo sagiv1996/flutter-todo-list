@@ -7,10 +7,10 @@ class ShortcuteService {
         notes.map((note) => noteToShortcutItem(note)).toList();
     // type = -1 is mean new note
     shortcutItems.insert(
-        0, ShortcutItem(localizedTitle: 'New note', type: '-1'));
+        0, ShortcutItem(localizedTitle: 'New note', type: '-1', icon: 'add_note'));
     return shortcutItems;
   }
 
   ShortcutItem noteToShortcutItem(Note note) => ShortcutItem(
-      type: note.id.toString(), localizedTitle: note.title, icon: 'AppIcon');
+      type: note.id.toString(), localizedTitle: note.title, icon: note.isCompleted? 'completed' : 'not_completed');
 }
