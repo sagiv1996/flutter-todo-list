@@ -4,6 +4,7 @@ import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluuter_todo_list_app/service/shortcut_service.dart';
+import 'package:fluuter_todo_list_app/view/widget/custom_radio_group.dart';
 import 'package:fluuter_todo_list_app/view/widget/note_card_widget.dart';
 import '../../main.dart';
 import 'edit_note_page.dart';
@@ -38,6 +39,7 @@ class _NotesPageState extends State<NotesPage> {
             style: TextStyle(fontSize: 24.0),
           ),
           actions: [
+            createFilterButton(),
             createInfoButton(),
             const SizedBox(
               width: 12.0,
@@ -53,10 +55,10 @@ class _NotesPageState extends State<NotesPage> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
           onPressed: () async {
             await Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddEditNotePage()),
+              MaterialPageRoute(builder: (context) => const AddEditNotePage()),
             );
 
             refreshNotes();
@@ -87,7 +89,7 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         itemCount: notes.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(2),
         crossAxisCount: 4,
@@ -126,4 +128,46 @@ class _NotesPageState extends State<NotesPage> {
                 ));
       },
       icon: const Icon(Icons.info_outline));
+
+  List<String> filterValues = [
+    'Completed',
+    'Not Completed',
+    'Have notification',
+    'Not have notification',
+    'Today'
+  ];
+  Map<String, List<String>> filters = {
+    'Completed': ['Comleted', 'Not completed'],
+    'Time for notification': ['Not set', 'Set', 'Today']
+  };
+
+  IconButton createFilterButton() => IconButton(
+        onPressed: () {
+          showModalBottomSheet<void>(
+            isScrollControlled: true,
+            isDismissible: true,
+            context: context,
+            builder: (BuildContext context) {
+              return SizedBox(
+                  height: 300,
+                  child: ListView(
+                    children: [
+                      CustomradioGroup(
+                        title: 'Completed',
+                        items: const ['Completd', 'Not completed'],
+                      ),
+                      CustomradioGroup(title: 'Notification', items: const [
+                        'No alert set',
+                        'An alert has been set',
+                        'Alert for today',
+                        'Alert for this week',
+                        'Alert for this month'
+                      ])
+                    ],
+                  ));
+            },
+          );
+        },
+        icon: const Icon(Icons.filter_alt),
+      );
 }
