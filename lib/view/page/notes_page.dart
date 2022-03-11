@@ -4,8 +4,8 @@ import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluuter_todo_list_app/service/shortcut_service.dart';
-import 'package:fluuter_todo_list_app/view/widget/custom_radio_group.dart';
 import 'package:fluuter_todo_list_app/view/widget/note_card_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 import 'edit_note_page.dart';
 import 'note_detail_page.dart';
@@ -142,32 +142,82 @@ class _NotesPageState extends State<NotesPage> {
   };
 
   IconButton createFilterButton() => IconButton(
+        icon: const Icon(Icons.filter_alt),
         onPressed: () {
           showModalBottomSheet<void>(
-            isScrollControlled: true,
-            isDismissible: true,
-            context: context,
-            builder: (BuildContext context) {
-              return SizedBox(
-                  height: 300,
-                  child: ListView(
-                    children: [
-                      CustomradioGroup(
-                        title: 'Completed',
-                        items: const ['Completd', 'Not completed'],
+              isScrollControlled: true,
+              isDismissible: true,
+              context: context,
+              builder: (BuildContext context) {
+                List<String> noteStatusOptions = ['Completed', 'Not completed'];
+                Object? noteStatus = 'fdg';
+
+                List<String> notificationOptions = [
+                  'No alert set',
+                  'An alert has been set',
+                  'Alert for today',
+                  'Alert for this week',
+                  'Alert for this month'
+                ];
+                Object? notification = '1';
+
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return SizedBox(
+                      height: 300,
+                      child: ListView(
+                        children: [
+                          ListView.builder(
+                              itemCount: noteStatusOptions.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, pos) => RadioListTile(
+                                    title: Text(noteStatusOptions[pos]),
+                                    groupValue: noteStatus,
+                                    value: noteStatusOptions[pos],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        noteStatus = value;
+                                      });
+                                    },
+                                  )),
+                          ListView.builder(
+                              itemCount: notificationOptions.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, pos) => RadioListTile(
+                                    title: Text(notificationOptions[pos]),
+                                    groupValue: notification,
+                                    value: notificationOptions[pos],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        notification = value;
+                                      });
+                                    },
+                                  ))
+                        ],
                       ),
-                      CustomradioGroup(title: 'Notification', items: const [
-                        'No alert set',
-                        'An alert has been set',
-                        'Alert for today',
-                        'Alert for this week',
-                        'Alert for this month'
-                      ])
-                    ],
-                  ));
-            },
-          );
+                    );
+                  },
+                );
+              });
         },
-        icon: const Icon(Icons.filter_alt),
       );
+
+  ListView createCustomList(Object? grValue, List<String> items) =>
+      ListView.builder(
+          itemCount: items.length,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, pos) => RadioListTile(
+                title: Text(items[pos]),
+                groupValue: grValue,
+                value: items[pos],
+                onChanged: (value) {
+                  setState(() {
+                    grValue = value;
+                    print(grValue);
+                  });
+                },
+              ));
 }
