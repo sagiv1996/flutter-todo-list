@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 
@@ -75,12 +76,20 @@ class NotesDataBase {
   }
 
   Future<List<Note>> readAllNotes() async {
+
+    final prefs = await SharedPreferences.getInstance();
     final db = await instance.database;
+    final completedStatus = prefs.getBool('noteStatus');
+    String? where;
+    if (completedStatus != null){
+      where = '${NoteFields.isCompleted} = $completedStatus';
+    }
     final orderBy = '${NoteFields.isCompleted}, ${NoteFields.createdTime} ASC';
     final result = await db
     !.query(
     tableNotes,
     columns: NoteFields.values,
+    where: where,
     orderBy: orderBy
     );
 

@@ -129,35 +129,26 @@ class _NotesPageState extends State<NotesPage> {
       },
       icon: const Icon(Icons.info_outline));
 
-  List<String> filterValues = [
-    'Completed',
-    'Not Completed',
-    'Have notification',
-    'Not have notification',
-    'Today'
-  ];
-  Map<String, List<String>> filters = {
-    'Completed': ['Comleted', 'Not completed'],
-    'Time for notification': ['Not set', 'Set', 'Today']
-  };
-
   IconButton createFilterButton() => IconButton(
         icon: const Icon(Icons.filter_alt),
-        onPressed: () {
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
           showModalBottomSheet<void>(
               isScrollControlled: true,
               isDismissible: true,
               context: context,
               builder: (BuildContext context) {
-                List<String> noteStatusOptions = ['Completed', 'Not completed'];
-                Object? noteStatus = 'fdg';
-
-                List<String> notificationOptions = [
-                  'No alert set',
-                  'An alert has been set',
-                  'Alert for today',
-                  'Alert for this week',
-                  'Alert for this month'
+                List<RadioTemp> noteStatusOptions = [
+                  RadioTemp(false, 'Completed'),
+                  RadioTemp(true, 'Not completed')
+                ];
+                Object? noteStatus = prefs.getBool('noteStatus');
+                List<RadioTemp> notificationOptions = [
+                  RadioTemp('null', 'No alert set'),
+                  RadioTemp('!= null', 'An alert has been set'),
+                  RadioTemp('today', 'Alert for today'),
+                  RadioTemp('this week', 'Alert for this week'),
+                  RadioTemp('thisa month', 'Alert for this month')
                 ];
                 Object? notification = '1';
 
@@ -170,25 +161,37 @@ class _NotesPageState extends State<NotesPage> {
                           ListView.builder(
                               itemCount: noteStatusOptions.length,
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, pos) => RadioListTile(
-                                    title: Text(noteStatusOptions[pos]),
+                                    title: Text(noteStatusOptions[pos]
+                                        .title
+                                        .toString()),
                                     groupValue: noteStatus,
-                                    value: noteStatusOptions[pos],
-                                    onChanged: (value) {
+                                    value: noteStatusOptions[pos].value,
+                                    toggleable: true,
+                                    onChanged: (value) async {
                                       setState(() {
                                         noteStatus = value;
                                       });
+                                      // Check if clear value or update value
+                                      value == null
+                                          ? await prefs.remove('noteStatus')
+                                          : await prefs.setBool(
+                                              'noteStatus', value as bool);
+
+                                      refreshNotes();
                                     },
                                   )),
                           ListView.builder(
                               itemCount: notificationOptions.length,
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, pos) => RadioListTile(
-                                    title: Text(notificationOptions[pos]),
+                                    title: Text(notificationOptions[pos]
+                                        .title
+                                        .toString()),
                                     groupValue: notification,
-                                    value: notificationOptions[pos],
+                                    value: notificationOptions[pos].value,
                                     onChanged: (value) {
                                       setState(() {
                                         notification = value;
@@ -208,7 +211,7 @@ class _NotesPageState extends State<NotesPage> {
       ListView.builder(
           itemCount: items.length,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, pos) => RadioListTile(
                 title: Text(items[pos]),
                 groupValue: grValue,
@@ -216,8 +219,15 @@ class _NotesPageState extends State<NotesPage> {
                 onChanged: (value) {
                   setState(() {
                     grValue = value;
-                    print(grValue);
                   });
                 },
               ));
+}
+
+// This class contains fields for radio filters. the fields is value and title.
+class RadioTemp {
+  Object value;
+  Object title;
+
+  RadioTemp(this.value, this.title);
 }
