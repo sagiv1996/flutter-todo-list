@@ -144,13 +144,10 @@ class _NotesPageState extends State<NotesPage> {
                 ];
                 Object? noteStatus = prefs.getBool('noteStatus');
                 List<RadioTemp> notificationOptions = [
-                  RadioTemp('null', 'No alert set'),
-                  RadioTemp('!= null', 'An alert has been set'),
-                  RadioTemp('today', 'Alert for today'),
-                  RadioTemp('this week', 'Alert for this week'),
-                  RadioTemp('thisa month', 'Alert for this month')
+                  RadioTemp('!= Null', 'No alert set'),
+                  RadioTemp('= Null', 'An alert has been set')
                 ];
-                Object? notification = '1';
+                Object? notification = prefs.getString('notificationExist');
 
                 return StatefulBuilder(
                   builder: (context, setState) {
@@ -187,15 +184,23 @@ class _NotesPageState extends State<NotesPage> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, pos) => RadioListTile(
+                                    toggleable: true,
                                     title: Text(notificationOptions[pos]
                                         .title
                                         .toString()),
                                     groupValue: notification,
                                     value: notificationOptions[pos].value,
-                                    onChanged: (value) {
+                                    onChanged: (value) async {
                                       setState(() {
                                         notification = value;
                                       });
+                                      value == null
+                                          ? await prefs
+                                              .remove('notificationExist')
+                                          : await prefs.setString(
+                                              'notificationExist',
+                                              value as String);
+                                      refreshNotes();
                                     },
                                   ))
                         ],

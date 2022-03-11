@@ -80,10 +80,27 @@ class NotesDataBase {
     final prefs = await SharedPreferences.getInstance();
     final db = await instance.database;
     final completedStatus = prefs.getBool('noteStatus');
+    // final notificationExist = prefs.getString('notificationExist');
     String? where;
     if (completedStatus != null){
       where = '${NoteFields.isCompleted} = $completedStatus';
     }
+
+
+    /////////////////////////// TODO
+//    if (notificationExist != null){
+//      if(where != null){
+//        where += ' AND ';
+//      }
+// where = '${NoteFields.timeForNotification} $notificationExist';
+//
+//
+//
+//
+//    }
+
+
+    print('where ${where}');
     final orderBy = '${NoteFields.isCompleted}, ${NoteFields.createdTime} ASC';
     final result = await db
     !.query(
@@ -93,6 +110,7 @@ class NotesDataBase {
     orderBy: orderBy
     );
 
+    print(result[1].toString());
     return result.map((json) => Note.fromJson(json)
     )
     .
