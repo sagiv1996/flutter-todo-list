@@ -70,10 +70,14 @@ class _NotesPageState extends State<NotesPage> {
     setState(() {
       isLoading = true;
     });
+
     notes = await NotesDataBase.instance.readAllNotes();
+    print('notes s');
 
     // Set shortcuts items
-    quickActions.setShortcutItems(ShortcuteService().returnShortcuts(notes));
+    if (notes.isNotEmpty) {
+      quickActions.setShortcutItems(ShortcuteService().returnShortcuts(notes));
+    }
 
     setState(() {
       isLoading = false;
@@ -139,13 +143,13 @@ class _NotesPageState extends State<NotesPage> {
               context: context,
               builder: (BuildContext context) {
                 List<RadioTemp> noteStatusOptions = [
-                  RadioTemp(false, 'Completed'),
-                  RadioTemp(true, 'Not completed')
+                  RadioTemp(true, 'Completed'),
+                  RadioTemp(false, 'Not completed')
                 ];
                 Object? noteStatus = prefs.getBool('noteStatus');
                 List<RadioTemp> notificationOptions = [
-                  RadioTemp('!= Null', 'No alert set'),
-                  RadioTemp('= Null', 'An alert has been set')
+                  RadioTemp('!= "null"', 'No alert set'),
+                  RadioTemp('= "null"', 'An alert has been set')
                 ];
                 Object? notification = prefs.getString('notificationExist');
 

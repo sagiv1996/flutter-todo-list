@@ -76,33 +76,29 @@ class NotesDataBase {
   }
 
   Future<List<Note>> readAllNotes() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final db = await instance.database;
+      final completedStatus = prefs.getBool('noteStatus');
+      final notificationExist = prefs.getString('notificationExist');
+      String ? where;
+      if (completedStatus != null) {
+        where = '${NoteFields.isCompleted} = $completedStatus  ';
+      }
 
-    final prefs = await SharedPreferences.getInstance();
-    final db = await instance.database;
-    final completedStatus = prefs.getBool('noteStatus');
-    // final notificationExist = prefs.getString('notificationExist');
-    String? where;
-    if (completedStatus != null){
-      where = '${NoteFields.isCompleted} = $completedStatus';
-    }
-
-
-    /////////////////////////// TODO
-//    if (notificationExist != null){
-//      if(where != null){
-//        where += ' AND ';
-//      }
-// where = '${NoteFields.timeForNotification} $notificationExist';
-//
-//
-//
-//
-//    }
+      if (notificationExist != null) {
+        if (where != null) {
+          where += ' AND ${NoteFields.timeForNotification} $notificationExist';
+        }
+        else {
+          where = '${NoteFields.timeForNotification} $notificationExist';
+        }
+      }
 
 
-    print('where ${where}');
-    final orderBy = '${NoteFields.isCompleted}, ${NoteFields.createdTime} ASC';
-    final result = await db
+      final orderBy = '${NoteFields.isCompleted}, ${NoteFields
+          .createdTime} ASC';
+      final result = await db
     !.query(
     tableNotes,
     columns: NoteFields.values,
@@ -110,13 +106,25 @@ class NotesDataBase {
     orderBy: orderBy
     );
 
-    print(result[1].toString());
+    // print(result[1].toString());
+
+
     return result.map((json) => Note.fromJson(json)
     )
-    .
+        .
     toList
     (
     );
+    }catch (err){
+    print(err);
+    }
+
+
+    throw
+    Exception
+    ('Date dont found');
+
+
   }
 
   Future<int> update(Note note) async {
