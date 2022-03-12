@@ -72,7 +72,6 @@ class _NotesPageState extends State<NotesPage> {
     });
 
     notes = await NotesDataBase.instance.readAllNotes();
-    print('notes s');
 
     // Set shortcuts items
     if (notes.isNotEmpty) {
@@ -148,8 +147,10 @@ class _NotesPageState extends State<NotesPage> {
                 ];
                 Object? noteStatus = prefs.getBool('noteStatus');
                 List<RadioTemp> notificationOptions = [
-                  RadioTemp('!= "null"', 'No alert set'),
-                  RadioTemp('= "null"', 'An alert has been set')
+                  RadioTemp('not null', 'No alert set'),
+                  RadioTemp('null', 'An alert has been set'),
+                  RadioTemp('this day', 'Today'),
+                  RadioTemp('this month', 'In This month'),
                 ];
                 Object? notification = prefs.getString('notificationExist');
 

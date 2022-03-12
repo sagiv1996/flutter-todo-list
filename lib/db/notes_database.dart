@@ -72,7 +72,8 @@ class NotesDataBase {
     whereArgs: [id]
     );
     if(maps.isNotEmpty) return Note.fromJson(maps.first);
-    else throw Exception('Id $id not found');
+    else throw Exception('Id $id not found'
+    );
   }
 
   Future<List<Note>> readAllNotes() async {
@@ -87,11 +88,27 @@ class NotesDataBase {
       }
 
       if (notificationExist != null) {
+        String ? notificationString;
+        switch (notificationExist) {
+          case 'not null' :
+            notificationString = '!= "null"';
+            break;
+          case 'null':
+            notificationString = '= "null"';
+            break;
+          case 'this day':
+            notificationString =
+            'LIKE "%${DateTime.now().toString().split(' ')[0]}%"';
+            break;
+          case 'this month':
+            notificationString =
+            'LIKE "%${DateTime.now().toString().substring(0, 6) }%"';
+        }
         if (where != null) {
-          where += ' AND ${NoteFields.timeForNotification} $notificationExist';
+          where += ' AND ${NoteFields.timeForNotification} $notificationString';
         }
         else {
-          where = '${NoteFields.timeForNotification} $notificationExist';
+          where = '${NoteFields.timeForNotification} $notificationString';
         }
       }
 
@@ -105,8 +122,6 @@ class NotesDataBase {
     where: where,
     orderBy: orderBy
     );
-
-    // print(result[1].toString());
 
 
     return result.map((json) => Note.fromJson(json)
@@ -122,7 +137,8 @@ class NotesDataBase {
 
     throw
     Exception
-    ('Date dont found');
+    ('Date dont found'
+    );
 
 
   }
@@ -150,3 +166,5 @@ class NotesDataBase {
     );
   }
 }
+
+
