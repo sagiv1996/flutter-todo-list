@@ -3,9 +3,7 @@ import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:intl/intl.dart';
-
 import 'edit_note_page.dart';
-import 'notes_page.dart';
 
 class NoteDetailPage extends StatefulWidget {
   final int noteId;
@@ -48,11 +46,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           actions: [editButton(), deleteButton()],
         ),
         body: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: ListView(
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                   children: [
                     Text.rich(
                       TextSpan(
@@ -95,7 +93,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                           )
                         : Text.rich(
                             TextSpan(
-                              style: TextStyle(color: Colors.white70),
+                              style: const TextStyle(color: Colors.white70),
                               children: [
                                 const WidgetSpan(
                                     child: Icon(Icons.notifications_active,
@@ -112,7 +110,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       );
 
   Widget editButton() => IconButton(
-      icon: Icon(Icons.edit_outlined),
+      icon: const Icon(Icons.edit_outlined),
       onPressed: () async {
         if (isLoading) return;
 
@@ -127,15 +125,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         icon: const Icon(Icons.delete),
         onPressed: () async {
           await ControllerNote.deleteNote(note.id as int);
-          if (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => NotesPage()),
-                    (Route<dynamic> route) => false);
-          }
+          Navigator.of(context).pop();
         },
       );
 }

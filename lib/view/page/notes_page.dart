@@ -5,8 +5,8 @@ import 'package:fluuter_todo_list_app/db/notes_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluuter_todo_list_app/service/shortcut_service.dart';
 import 'package:fluuter_todo_list_app/view/widget/note_card_widget.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../main.dart';
 import 'edit_note_page.dart';
 import 'note_detail_page.dart';
 
@@ -18,8 +18,8 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   late List<Note> notes;
 
-//
-//  final QuickActions quickActions = QuickActions().;
+  QuickActions quickActions = QuickActions();
+
   bool isLoading = false;
 
   @override
@@ -27,6 +27,10 @@ class _NotesPageState extends State<NotesPage> {
     // TODO: implement initState
 
     refreshNotes();
+
+    quickActions.initialize((type) {
+      navigateRoute(int.parse(type));
+    });
 
     super.initState();
   }
@@ -232,6 +236,21 @@ class _NotesPageState extends State<NotesPage> {
                   });
                 },
               ));
+
+  void navigateRoute(int noteId) async {
+    if (noteId == -1) {
+      await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => AddEditNotePage(),
+      ));
+    } else {
+      await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => NoteDetailPage(
+          noteId: noteId,
+        ),
+      ));
+    }
+    refreshNotes();
+  }
 }
 
 // This class contains fields for radio filters. the fields is value and title.
