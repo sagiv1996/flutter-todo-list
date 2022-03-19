@@ -18,7 +18,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var initializationSettingsAndroid = const AndroidInitializationSettings(
-    'icon',
+    '@mipmap/ic_launcher',
   );
   var initializationSettingsIOS = const IOSInitializationSettings(
       requestAlertPermission: true,
