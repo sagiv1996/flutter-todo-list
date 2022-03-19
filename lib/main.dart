@@ -7,7 +7,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 // This value relavant only with user back from notification
-int? noteId;
+ int? noteId;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

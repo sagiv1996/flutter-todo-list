@@ -16,10 +16,7 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static const IOSNotificationDetails iosNotification = IOSNotificationDetails(
-    presentAlert: true,
-    presentBadge: true,
-    presentSound: true
-  );
+      presentAlert: true, presentBadge: true, presentSound: true);
 
   static const AndroidNotificationDetails androidNotification =
       AndroidNotificationDetails('todolist_notif', 'todolist_notif');
@@ -42,11 +39,10 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: note.id.toString(),
-
     );
   }
 
-  void cancelNotfication(int id) {
+  void cancelNotification(int id) {
     flutterLocalNotificationsPlugin.cancel(id);
   }
 }

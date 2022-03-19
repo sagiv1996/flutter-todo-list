@@ -17,7 +17,7 @@ class ControllerNote {
     await NotesDataBase.instance.update(note);
 
     // Cancel notificatin and create new notification if datetime is valid
-    NotificationService().cancelNotfication(note.id as int);
+    NotificationService().cancelNotification(note.id as int);
 
     // timeForNotification is save string at database . is why i used 'null'
     if (note.timeForNotification != null &&
@@ -32,6 +32,6 @@ class ControllerNote {
   // This method get note id and delete note and cancek notification
   static Future deleteNote(int noteId) async {
     await NotesDataBase.instance.delete(noteId);
-    NotificationService().cancelNotfication(noteId);
+    NotificationService().cancelNotification(noteId);
   }
 }
