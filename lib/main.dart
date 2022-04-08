@@ -15,7 +15,7 @@ Future main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MainClass());
+  runApp(const MainClass());
 }
 
 class MainClass extends StatelessWidget {
