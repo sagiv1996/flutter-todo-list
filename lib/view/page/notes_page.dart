@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluuter_todo_list_app/controller/controller_note.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:fluuter_todo_list_app/db/notes_database.dart';
@@ -18,7 +19,10 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   late List<Note> notes;
 
-  QuickActions quickActions = QuickActions();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  final QuickActions quickActions = QuickActions();
 
   bool isLoading = false;
 
@@ -26,11 +30,29 @@ class _NotesPageState extends State<NotesPage> {
   void initState() {
     // TODO: implement initState
 
+    var initializationSettingsAndroid = const AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
+    var initializationSettingsIOS = const IOSInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        onDidReceiveLocalNotification: null);
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
     refreshNotes();
 
     quickActions.initialize((type) {
       navigateRoute(int.parse(type));
     });
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: (String? payload) {
+        navigateRoute(int.parse(payload!));
+      },
+    );
 
     super.initState();
   }

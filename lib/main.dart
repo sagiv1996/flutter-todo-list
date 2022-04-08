@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'view/page/notes_page.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 // This value relavant only with user back from notification
  int? noteId;
@@ -12,23 +9,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var initializationSettingsAndroid = const AndroidInitializationSettings(
-    '@mipmap/ic_launcher',
-  );
-  var initializationSettingsIOS = const IOSInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification: null);
-  var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onSelectNotification: (String? payload) async {
-      noteId = int.tryParse(payload!);
-    },
-  );
 
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

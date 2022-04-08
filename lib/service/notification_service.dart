@@ -19,7 +19,11 @@ class NotificationService {
       presentAlert: true, presentBadge: true, presentSound: true);
 
   static const AndroidNotificationDetails androidNotification =
-      AndroidNotificationDetails('todolist_notif', 'todolist_notif');
+      AndroidNotificationDetails('todolist_notif', 'todolist_notif',
+          priority: Priority.high,
+          showWhen: true,
+          visibility: NotificationVisibility.public
+      );
 
   static const platformChannelSpecifics =
       NotificationDetails(android: androidNotification, iOS: iosNotification);
@@ -29,17 +33,16 @@ class NotificationService {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Jerusalem'));
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      note.id as int,
-      note.title,
-      note.description,
-      tz.TZDateTime.from(
-          DateTime.parse(note.timeForNotification.toString()), tz.local),
-      platformChannelSpecifics,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: note.id.toString(),
-    );
+        note.id as int,
+        note.title,
+        note.description,
+        tz.TZDateTime.from(
+            DateTime.parse(note.timeForNotification.toString()), tz.local),
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: note.id.toString());
   }
 
   void cancelNotification(int id) {
