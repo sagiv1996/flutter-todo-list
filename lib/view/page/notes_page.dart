@@ -138,7 +138,7 @@ class _NotesPageState extends State<NotesPage> {
             },
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NoteDetailPage(noteId: note.id!),
+                builder: (context) => NoteDetailPage(noteId: note.id!,),
               ));
 
               refreshNotes();
@@ -262,12 +262,13 @@ class _NotesPageState extends State<NotesPage> {
   void navigateRoute(int noteId) async {
     if (noteId == -1) {
       await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AddEditNotePage(),
+        builder: (context) => const AddEditNotePage(),
       ));
     } else {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NoteDetailPage(
           noteId: noteId,
+          isComingFromOut: true,
         ),
       ));
     }

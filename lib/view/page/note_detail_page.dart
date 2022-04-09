@@ -8,10 +8,12 @@ import 'edit_note_page.dart';
 class NoteDetailPage extends StatefulWidget {
   final int noteId;
 
-  const NoteDetailPage({
-    Key? key,
-    required this.noteId,
-  }) : super(key: key);
+  // This value be true is user come from the desktop (from shortcut or from notification)
+  final bool isComingFromOut;
+
+  const NoteDetailPage(
+      {Key? key, required this.noteId, this.isComingFromOut = false})
+      : super(key: key);
 
   @override
   _NoteDetailPageState createState() => _NoteDetailPageState();
@@ -21,6 +23,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   late Note note;
 
   bool isLoading = false;
+  bool clickOnCloseDialog = false;
 
   @override
   void initState() {
@@ -50,7 +53,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             : Padding(
                 padding: const EdgeInsets.all(12),
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                   children: [
                     Text.rich(
                       TextSpan(
@@ -103,7 +107,19 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                                         ' ${DateFormat("y MMM d, H:mm").format(DateTime.parse(note.timeForNotification as String))}'),
                               ],
                             ),
-                          )
+                          ),
+                    if (widget.isComingFromOut && !clickOnCloseDialog)
+                      AlertDialog(
+                        title: const Text('Choose your actions'),
+                        actions: [
+                          completedNote(),
+                          remindMeLater(5),
+                          remindMeLater(15),
+                          remindMeLater(30),
+                          remindMeLater(60),
+                          closeDialog()
+                        ],
+                      )
                   ],
                 ),
               ),
@@ -128,4 +144,30 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           Navigator.of(context).pop();
         },
       );
+
+  Widget completedNote() => TextButton(
+      child: const Text('Completed'),
+      onPressed: () async {
+        Note newNote = note.copy(isCompleted: true);
+        await ControllerNote.updateNote(newNote);
+        Navigator.of(context).pop();
+      });
+
+  Widget remindMeLater(int minutes) => TextButton(
+      onPressed: () async {
+        Note newNote = note.copy(
+            timeForNotification:
+                DateTime.now().add(Duration(minutes: minutes)).toString());
+
+        await ControllerNote.updateNote(newNote);
+        Navigator.of(context).pop();
+      },
+      child: Text('$minutes minutes'));
+
+  closeDialog() => TextButton(
+    onPressed: () => setState(() {
+      clickOnCloseDialog = true;
+    }),
+    child: const Text('Close dialog'),
+  );
 }
