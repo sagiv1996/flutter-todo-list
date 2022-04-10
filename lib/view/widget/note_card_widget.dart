@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluuter_todo_list_app/model/note.dart';
 import 'package:intl/intl.dart';
 
-final _lightColors = [
+final lightColors = [
   Colors.amber.shade300,
   Colors.lightGreen.shade300,
   Colors.lightBlue.shade300,
@@ -12,7 +12,6 @@ final _lightColors = [
 ];
 
 class NoteCardWidget extends StatelessWidget {
-  // ignore: prefer_const_constructors_in_immutables
   NoteCardWidget({
     Key? key,
     required this.note,
@@ -25,7 +24,7 @@ class NoteCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Pick colors from the accent colors based on index
-    final color = _lightColors[index % _lightColors.length];
+    final color = lightColors[note.id! % lightColors.length];
     final time = DateFormat.yMMMd().format(note.createdTime);
     final minHeight = getMinHeight(index);
 
