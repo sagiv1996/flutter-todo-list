@@ -44,7 +44,7 @@ class NoteFormWidget extends StatelessWidget {
       );
 
   Widget buildTitle() => TextFormField(
-    textCapitalization: TextCapitalization.sentences,
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 1,
         autofocus: true,
         initialValue: title,
@@ -64,7 +64,7 @@ class NoteFormWidget extends StatelessWidget {
       );
 
   Widget buildDescription() => TextFormField(
-    textCapitalization: TextCapitalization.sentences,
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 5,
         initialValue: description,
         style: const TextStyle(color: Colors.white60, fontSize: 18),
@@ -104,8 +104,8 @@ class NoteFormWidget extends StatelessWidget {
           if (date != null) {
             final time = await showTimePicker(
                 context: context,
-                initialTime:
-                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now().add(Duration(minutes: 2))));
+                initialTime: TimeOfDay.fromDateTime(
+                    currentValue ?? DateTime.now().add(Duration(minutes: 2))));
             return DateTimeField.combine(date, time);
           }
         },
