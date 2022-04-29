@@ -17,19 +17,20 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  late List<Note> notes;
-
+  List<Note> notes = <Note>[];
+  bool haveMoreNotes = true;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   final QuickActions quickActions = QuickActions();
 
   bool isLoading = false;
+  int offset = 0;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     // TODO: implement initState
-
     var initializationSettingsAndroid = const AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
@@ -40,8 +41,6 @@ class _NotesPageState extends State<NotesPage> {
         onDidReceiveLocalNotification: null);
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-
-    refreshNotes();
 
     quickActions.initialize((type) {
       navigateRoute(int.parse(type));
@@ -55,6 +54,15 @@ class _NotesPageState extends State<NotesPage> {
     );
 
     super.initState();
+
+    refreshNotes();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        offset++;
+        refreshNotes();
+      }
+    });
   }
 
   @override
@@ -86,7 +94,8 @@ class _NotesPageState extends State<NotesPage> {
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const AddEditNotePage()),
             );
-
+            notes.clear();
+            offset = 0;
             refreshNotes();
           },
         ),
@@ -97,11 +106,25 @@ class _NotesPageState extends State<NotesPage> {
       isLoading = true;
     });
 
-    notes = await NotesDataBase.instance.readAllNotes();
+    if (haveMoreNotes) {
+      List<Note> newNotes =
+          await NotesDataBase.instance.readAllNotes(offset: offset);
 
-    // Set shortcuts items
-    if (notes.isNotEmpty) {
-      quickActions.setShortcutItems(ShortcuteService().returnShortcuts(notes));
+      if (newNotes.isNotEmpty) {
+        if (notes.isEmpty) {
+          notes = newNotes;
+        } else {
+          notes.addAll(newNotes);
+        }
+      } else {
+        haveMoreNotes = false;
+      }
+
+      // Set shortcuts items
+      if (notes.isNotEmpty) {
+        quickActions
+            .setShortcutItems(ShortcuteService().returnShortcuts(notes));
+      }
     }
 
     setState(() {
@@ -119,6 +142,7 @@ class _NotesPageState extends State<NotesPage> {
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
         padding: const EdgeInsets.all(8),
+        controller: _scrollController,
         itemCount: notes.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(2),
         crossAxisCount: 4,
@@ -138,7 +162,9 @@ class _NotesPageState extends State<NotesPage> {
             },
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NoteDetailPage(noteId: note.id!,),
+                builder: (context) => NoteDetailPage(
+                  noteId: note.id!,
+                ),
               ));
 
               refreshNotes();
@@ -206,7 +232,8 @@ class _NotesPageState extends State<NotesPage> {
                                           ? await prefs.remove('noteStatus')
                                           : await prefs.setBool(
                                               'noteStatus', value as bool);
-
+                                      notes.clear();
+                                      offset = 0;
                                       refreshNotes();
                                     },
                                   )),
@@ -231,6 +258,8 @@ class _NotesPageState extends State<NotesPage> {
                                           : await prefs.setString(
                                               'notificationExist',
                                               value as String);
+                                      notes.clear();
+                                      offset = 0;
                                       refreshNotes();
                                     },
                                   ))
@@ -271,7 +300,10 @@ class _NotesPageState extends State<NotesPage> {
           isComingFromOut: true,
         ),
       ));
+
     }
+    notes.clear();
+    offset = 0;
     refreshNotes();
   }
 }
