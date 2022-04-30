@@ -18,7 +18,6 @@ class NotesPage extends StatefulWidget {
 
 class _NotesPageState extends State<NotesPage> {
   List<Note> notes = <Note>[];
-  bool haveMoreNotes = true;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -26,7 +25,7 @@ class _NotesPageState extends State<NotesPage> {
 
   bool isLoading = false;
   int offset = 0;
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -56,9 +55,9 @@ class _NotesPageState extends State<NotesPage> {
     super.initState();
 
     refreshNotes();
-    _scrollController.addListener(() {
-      if (_scrollController.position.maxScrollExtent ==
-          _scrollController.position.pixels) {
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent ==
+          scrollController.position.pixels) {
         offset++;
         refreshNotes();
       }
@@ -106,18 +105,14 @@ class _NotesPageState extends State<NotesPage> {
       isLoading = true;
     });
 
-    if (haveMoreNotes) {
-      List<Note> newNotes =
-          await NotesDataBase.instance.readAllNotes(offset: offset);
+    List<Note> newNotes =
+        await NotesDataBase.instance.readAllNotes(offset: offset);
 
-      if (newNotes.isNotEmpty) {
-        if (notes.isEmpty) {
-          notes = newNotes;
-        } else {
-          notes.addAll(newNotes);
-        }
+    if (newNotes.isNotEmpty) {
+      if (notes.isEmpty) {
+        notes = newNotes;
       } else {
-        haveMoreNotes = false;
+        notes.addAll(newNotes);
       }
 
       // Set shortcuts items
@@ -142,7 +137,7 @@ class _NotesPageState extends State<NotesPage> {
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
         padding: const EdgeInsets.all(8),
-        controller: _scrollController,
+        controller: scrollController,
         itemCount: notes.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(2),
         crossAxisCount: 4,
@@ -157,7 +152,8 @@ class _NotesPageState extends State<NotesPage> {
               Note noteToUpdate =
                   note.copy(id: note.id, isCompleted: !note.isCompleted);
               await ControllerNote.updateNote(noteToUpdate);
-
+              notes.clear();
+              offset = 0;
               refreshNotes();
             },
             onTap: () async {
@@ -300,7 +296,6 @@ class _NotesPageState extends State<NotesPage> {
           isComingFromOut: true,
         ),
       ));
-
     }
     notes.clear();
     offset = 0;
