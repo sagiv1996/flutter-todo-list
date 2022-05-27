@@ -76,7 +76,7 @@ class NotesDataBase {
     );
   }
 
-  Future<List<Note>> readAllNotes({int offset = 0}) async {
+  Future<List<Note>> readAllNotes() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final db = await instance.database;
@@ -115,15 +115,12 @@ class NotesDataBase {
 
       final orderBy = '${NoteFields.isCompleted}, ${NoteFields
           .createdTime} ASC';
-      const limit = 20;
       final result = await db
     !.query(
     tableNotes,
     columns: NoteFields.values,
     where: where,
     orderBy: orderBy,
-    limit: limit,
-    offset: offset * limit
     );
 
 

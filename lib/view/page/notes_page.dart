@@ -24,8 +24,6 @@ class _NotesPageState extends State<NotesPage> {
   final QuickActions quickActions = QuickActions();
 
   bool isLoading = false;
-  int offset = 0;
-  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -55,13 +53,6 @@ class _NotesPageState extends State<NotesPage> {
     super.initState();
 
     refreshNotes();
-    scrollController.addListener(() {
-      if (scrollController.position.maxScrollExtent ==
-          scrollController.position.pixels) {
-        offset++;
-        refreshNotes();
-      }
-    });
   }
 
   @override
@@ -93,8 +84,6 @@ class _NotesPageState extends State<NotesPage> {
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const AddEditNotePage()),
             );
-            notes.clear();
-            offset = 0;
             refreshNotes();
           },
         ),
@@ -105,22 +94,14 @@ class _NotesPageState extends State<NotesPage> {
       isLoading = true;
     });
 
-    List<Note> newNotes =
-        await NotesDataBase.instance.readAllNotes(offset: offset);
-
-    if (newNotes.isNotEmpty) {
-      if (notes.isEmpty) {
-        notes = newNotes;
-      } else {
-        notes.addAll(newNotes);
-      }
+    notes =  await NotesDataBase.instance.readAllNotes();
 
       // Set shortcuts items
       if (notes.isNotEmpty) {
         quickActions
             .setShortcutItems(ShortcuteService().returnShortcuts(notes));
       }
-    }
+
 
     setState(() {
       isLoading = false;
@@ -137,7 +118,6 @@ class _NotesPageState extends State<NotesPage> {
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
         padding: const EdgeInsets.all(8),
-        controller: scrollController,
         itemCount: notes.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(2),
         crossAxisCount: 4,
@@ -152,8 +132,6 @@ class _NotesPageState extends State<NotesPage> {
               Note noteToUpdate =
                   note.copy(id: note.id, isCompleted: !note.isCompleted);
               await ControllerNote.updateNote(noteToUpdate);
-              notes.clear();
-              offset = 0;
               refreshNotes();
             },
             onTap: () async {
@@ -228,8 +206,6 @@ class _NotesPageState extends State<NotesPage> {
                                           ? await prefs.remove('noteStatus')
                                           : await prefs.setBool(
                                               'noteStatus', value as bool);
-                                      notes.clear();
-                                      offset = 0;
                                       refreshNotes();
                                     },
                                   )),
@@ -254,8 +230,6 @@ class _NotesPageState extends State<NotesPage> {
                                           : await prefs.setString(
                                               'notificationExist',
                                               value as String);
-                                      notes.clear();
-                                      offset = 0;
                                       refreshNotes();
                                     },
                                   ))
@@ -271,6 +245,7 @@ class _NotesPageState extends State<NotesPage> {
   ListView createCustomList(Object? grValue, List<String> items) =>
       ListView.builder(
           itemCount: items.length,
+
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, pos) => RadioListTile(
@@ -297,8 +272,6 @@ class _NotesPageState extends State<NotesPage> {
         ),
       ));
     }
-    notes.clear();
-    offset = 0;
     refreshNotes();
   }
 }
