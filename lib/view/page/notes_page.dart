@@ -90,6 +90,7 @@ class _NotesPageState extends State<NotesPage> {
       );
 
   Future refreshNotes() async {
+    notes.clear();
     setState(() {
       isLoading = true;
     });
